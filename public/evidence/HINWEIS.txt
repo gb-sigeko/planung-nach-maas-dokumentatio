@@ -1,0 +1,6 @@
+Dieser Ordner enthält alle Beweismittel-Dateien (PDFs, Bilder, Dokumente).
+
+So laden Sie neue Beweise hoch:
+1. Legen Sie die Datei in diesen Ordner (public/evidence/) ab.
+2. Der Dateiname muss exakt mit dem Namen in der content_master.json übereinstimmen.
+3. Die Links auf der Website verweisen automatisch auf /evidence/<Dateiname>.

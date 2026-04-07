@@ -1,207 +1,99 @@
 import { contentData, financialData } from "@/lib/data";
-import { DamageTicker } from "@/components/DamageTicker";
-import { DelayBar } from "@/components/DelayBar";
-import { CostTable } from "@/components/CostTable";
-import { Timeline } from "@/components/Timeline";
+import dynamicIndexRaw from "@/lib/dynamic_index.json";
+import { Sidebar } from "@/components/Sidebar";
+import { FeedEntry } from "@/components/FeedEntry";
 
 export default function Home() {
+  const dynamicIndex = dynamicIndexRaw as any;
+
   return (
-    <div
-      className="min-h-screen"
-      style={{ background: "var(--color-bg)" }}
-    >
-      {/* ===== HEADER / HERO ===== */}
-      <header
-        className="relative overflow-hidden border-b"
-        style={{ borderColor: "rgba(220,38,38,0.2)" }}
-      >
-        {/* Background gradient */}
-        <div
-          className="absolute inset-0 pointer-events-none"
-          style={{
-            background:
-              "radial-gradient(ellipse 80% 60% at 50% -20%, rgba(220,38,38,0.12) 0%, transparent 60%)",
-          }}
-        />
-
-        <div className="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
-          {/* Warning badge */}
-          <div className="section-badge mb-6">
-            <span>🔍</span>
-            <span>Investigative Dokumentation · öffentliches Interesse</span>
+    <div className="bg-gray-950 min-h-screen font-sans text-gray-200">
+      {/* HEADER HERO */}
+      <header className="relative py-24 px-6 lg:px-8 border-b border-gray-800 bg-gradient-to-b from-gray-900 to-gray-950">
+        <div className="absolute inset-0 bg-[url('https://placehold.co/1920x400/000000/111111?text=+')] opacity-20 bg-cover bg-center"></div>
+        <div className="max-w-6xl mx-auto relative z-10 flex flex-col items-center text-center">
+          <div className="mb-6 px-4 py-1.5 rounded-full border border-red-900/50 bg-red-900/20 text-red-500 text-sm font-semibold tracking-widest uppercase">
+            Investigatives Bau-Logbuch
           </div>
-
-          {/* Main title */}
-          <h1
-            className="text-3xl sm:text-5xl font-black leading-tight tracking-tight mb-4"
-            style={{
-              background:
-                "linear-gradient(135deg, #f9fafb 0%, #e5e7eb 50%, #9ca3af 100%)",
-              WebkitBackgroundClip: "text",
-              WebkitTextFillColor: "transparent",
-              backgroundClip: "text",
-            }}
-          >
-            Planung nach Maas –<br />
-            <span style={{ WebkitTextFillColor: "#ef4444" }}>
-              Erfahrungen & Dokumentation
-            </span>
+          <h1 className="text-5xl md:text-7xl font-black text-transparent bg-clip-text bg-gradient-to-r from-gray-100 to-gray-500 mb-6 tracking-tight leading-tight">
+            Planung nach Maas
+            <br />
+            <span className="text-red-500">Das Versagen in Akten</span>
           </h1>
-
-          <p className="text-lg sm:text-xl max-w-3xl mb-6" style={{ color: "#9ca3af" }}>
-            Vollständige, chronologische Dokumentation des Planungsversagens des
-            Büros{" "}
-            <strong style={{ color: "#e5e7eb" }}>„Planung nach Maas"</strong>{" "}
-            (Frederic Maas / Karl-Josef Maas, Nauort) – beruhend auf
-            eigens gesicherten Beweismitteln.
+          <p className="text-xl text-gray-400 max-w-3xl leading-relaxed">
+            Ein dynamisch indizierter Einblick in das eklatante Planungsversagen des Büros Maas (Nauort). 
+            Basierend auf {dynamicIndex?.stats?.totalFiles || 0} eingescannten Beweismitteln, Live-Dokumenten und Fakten.
           </p>
-
-          {/* Meta chips */}
-          <div className="flex flex-wrap gap-3">
-            {[
-              { label: "Nauort / Rheinland-Pfalz", icon: "📍" },
-              { label: "8 dokumentierte Schadensphasen", icon: "📋" },
-              { label: "Gesamtschaden ~120.000 €", icon: "💰" },
-              { label: "Letzte Aktualisierung: April 2026", icon: "📅" },
-            ].map((chip) => (
-              <span
-                key={chip.label}
-                className="flex items-center gap-2 px-3 py-1.5 rounded-full text-sm"
-                style={{
-                  background: "rgba(37,44,56,0.8)",
-                  border: "1px solid rgba(55,65,81,0.8)",
-                  color: "#9ca3af",
-                }}
-              >
-                {chip.icon} {chip.label}
-              </span>
-            ))}
-          </div>
         </div>
       </header>
 
-      {/* ===== DISCLAIMER ===== */}
-      <div
-        className="border-b py-4 px-4"
-        style={{
-          background: "rgba(245,158,11,0.05)",
-          borderColor: "rgba(245,158,11,0.2)",
-        }}
-      >
-        <div className="max-w-5xl mx-auto flex items-start gap-3 text-sm">
-          <span className="text-lg flex-shrink-0">⚠️</span>
-          <p style={{ color: "#d97706" }}>
-            <strong>Hinweis:</strong> Diese Seite dokumentiert ausschließlich
-            belegbare, eigene Erfahrungen des Bauherrn. Alle Aussagen basieren
-            auf gesicherten Beweismitteln (Gutachten, Verträge, Korrespondenz).
-            Diese Dokumentation dient dem öffentlichen Informationsinteresse und
-            der Verbraucherschutz-Aufklärung.
+      {/* DISCLAIMER / WARNING */}
+      <div className="bg-amber-900/20 border-b border-amber-900/40 px-6 py-4">
+        <div className="max-w-6xl mx-auto flex items-start gap-4">
+          <span className="text-amber-500 mt-0.5">⚠️</span>
+          <p className="text-amber-400/90 text-sm leading-relaxed">
+            <strong>Hinweis:</strong> Alle Einträge in diesem Feed sind mit direkt gescannten Dokumenten (PDF, JPG) 
+            aus dem Cloud-Speicher hinterlegt. Die Metadaten werden live aktualisiert. Reines Informationsinteresse.
           </p>
         </div>
       </div>
 
-      {/* ===== MAIN CONTENT ===== */}
-      <main className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-16">
-        {/* --- Damage Ticker --- */}
-        <section id="schadensumme" aria-label="Gesamtschadenssumme">
-          <DamageTicker targetAmount={financialData.totalDamage} />
-        </section>
+      <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16 flex flex-col lg:flex-row gap-12 relative">
+        
+        {/* SIDEBAR (Sticky Nav & Stats) */}
+        <Sidebar 
+          phases={contentData.phases} 
+          stats={dynamicIndex?.stats} 
+          totalDamage={financialData.totalDamage} 
+        />
 
-        {/* --- Special Components Grid --- */}
-        <section id="finanzielle-analyse" aria-label="Finanzielle Analyse">
-          <h2
-            className="text-2xl font-bold mb-8"
-            style={{ color: "#f9fafb" }}
-          >
-            Finanzielle Analyse
-          </h2>
-          <div className="space-y-8">
-            {/* Delay Bar */}
-            <DelayBar delayMonths={financialData.delayMonths} />
+        {/* FEED / BLOG CONTENT */}
+        <div className="flex-1 max-w-3xl min-w-0">
+          {contentData.phases.map((phase) => (
+            <div key={phase.id} className="mb-8">
+              {/* Phase Header for context */}
+              {/* 
+              <div className="mb-10 pb-4 border-b border-gray-800">
+                <h2 className="text-3xl font-black text-white">{phase.name}</h2>
+              </div>
+              */}
 
-            {/* Cost Table */}
-            <CostTable data={financialData.costComparison} />
-          </div>
-        </section>
+              {phase.chapters.map((chapter) => {
+                // Find dynamic index files corresponding to this chapter
+                const matchedFiles = dynamicIndex?.files?.filter((f: any) => 
+                  f.matchedChapterIds?.includes(chapter.id)
+                ) || [];
 
-        {/* --- Timeline --- */}
-        <section id="chronologie" aria-label="Chronologische Dokumentation">
-          <div className="mb-8">
-            <div className="section-badge mb-3">
-              <span>📅</span>
-              <span>Chronologie</span>
+                return (
+                  <FeedEntry 
+                    key={chapter.id} 
+                    chapter={chapter} 
+                    phaseId={phase.id} 
+                    files={matchedFiles} 
+                  />
+                );
+              })}
             </div>
-            <h2 className="text-2xl font-bold" style={{ color: "#f9fafb" }}>
-              Die 8 Schadensphasen
-            </h2>
-            <p className="mt-2 text-sm" style={{ color: "#6b7280" }}>
-              Klicken Sie auf eine Phase, um Details und Beweismittel zu sehen.
-            </p>
-          </div>
-          <Timeline phases={contentData.phases} />
-        </section>
+          ))}
 
-        {/* --- Keywords for SEO (structured, not hidden) --- */}
-        <section
-          id="stichworte"
-          className="rounded-xl p-6"
-          style={{
-            background: "rgba(31,41,55,0.5)",
-            border: "1px solid rgba(55,65,81,0.6)",
-          }}
-        >
-          <h2 className="text-lg font-bold mb-3" style={{ color: "#f9fafb" }}>
-            Über diese Dokumentation
-          </h2>
-          <p className="text-sm leading-relaxed" style={{ color: "#9ca3af" }}>
-            Diese Seite richtet sich an Personen, die Informationen zu{" "}
-            <strong style={{ color: "#e5e7eb" }}>Planung nach Maas</strong>,{" "}
-            <strong style={{ color: "#e5e7eb" }}>Maas Nauort</strong>,{" "}
-            <strong style={{ color: "#e5e7eb" }}>Frederic Maas</strong> oder{" "}
-            <strong style={{ color: "#e5e7eb" }}>Karl-Josef Maas</strong> aus
-            Nauort suchen. Alle dokumentierten Schäden umfassen Baumängel,
-            Planungsfehler, Bauverzögerungen und finanzielle Schäden in der
-            Region Bendorf / Rheinland-Pfalz. Die Dokumentation ist vollständig
-            und mit Originalbelegen untermauert.
-          </p>
-          <div className="mt-4 flex flex-wrap gap-2">
-            {contentData.project_metadata.target_keywords.map((kw) => (
-              <span
-                key={kw}
-                className="px-2 py-0.5 rounded text-xs"
-                style={{
-                  background: "rgba(55,65,81,0.8)",
-                  color: "#9ca3af",
-                  border: "1px solid rgba(75,85,99,0.5)",
-                }}
-              >
-                {kw}
-              </span>
-            ))}
+          {/* End of Feed Signal */}
+          <div className="py-12 flex flex-col items-center justify-center border-t border-gray-800 text-gray-500">
+            <span className="text-3xl mb-4">📜</span>
+            <p className="font-medium">Ende der Akte</p>
+            <p className="text-sm mt-2">Weitere Dokumente werden automatisch synchronisiert.</p>
           </div>
-        </section>
+        </div>
       </main>
 
-      {/* ===== FOOTER ===== */}
-      <footer
-        className="border-t mt-16 py-10"
-        style={{ borderColor: "rgba(55,65,81,0.6)" }}
-      >
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <p className="text-sm" style={{ color: "#6b7280" }}>
-            © 2026 · Bühlervilla Dokumentation ·{" "}
-            <a
-              href="https://www.buehler.zone"
-              className="hover:underline"
-              style={{ color: "#9ca3af" }}
-            >
-              www.buehler.zone
-            </a>
+      {/* SEO / FOOTER */}
+      <footer className="border-t border-gray-900 bg-gray-950 py-12 px-6">
+        <div className="max-w-6xl mx-auto flex flex-col items-center justify-center text-center">
+          <p className="text-gray-500 mb-6">
+            Such-Tags: Erfahrungen Planung nach Maas, Maas Bendorf Kritik, Frederic Maas Nauort, Baumängel
           </p>
-          <p className="text-xs mt-2" style={{ color: "#4b5563" }}>
-            Diese Dokumentation basiert auf eigenen Erfahrungen und gesicherten
-            Beweismitteln. Alle Angaben ohne Gewähr auf Vollständigkeit.
-          </p>
+          <div className="text-sm text-gray-600">
+            © 2026 Bühlervilla Dokumentation · Cloud-Indexing System V2
+          </div>
         </div>
       </footer>
     </div>

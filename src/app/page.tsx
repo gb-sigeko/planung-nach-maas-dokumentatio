@@ -7,95 +7,84 @@ export default function Home() {
   const dynamicIndex = dynamicIndexRaw as any;
 
   return (
-    <div className="bg-gray-950 min-h-screen font-sans text-gray-200">
+    <div className="font-sans">
+      
       {/* HEADER HERO */}
-      <header className="relative py-24 px-6 lg:px-8 border-b border-gray-800 bg-gradient-to-b from-gray-900 to-gray-950">
-        <div className="absolute inset-0 bg-[url('https://placehold.co/1920x400/000000/111111?text=+')] opacity-20 bg-cover bg-center"></div>
-        <div className="max-w-6xl mx-auto relative z-10 flex flex-col items-center text-center">
-          <div className="mb-6 px-4 py-1.5 rounded-full border border-red-900/50 bg-red-900/20 text-red-500 text-sm font-semibold tracking-widest uppercase">
-            Investigatives Bau-Logbuch
-          </div>
-          <h1 className="text-5xl md:text-7xl font-black text-transparent bg-clip-text bg-gradient-to-r from-gray-100 to-gray-500 mb-6 tracking-tight leading-tight">
-            Planung nach Maas
-            <br />
-            <span className="text-red-500">Das Versagen in Akten</span>
+      <header className="bg-white border-b border-gray-200 py-20 px-4 text-center shadow-sm relative z-10">
+        <div className="max-w-4xl mx-auto">
+          <p className="text-[10px] font-black uppercase tracking-[0.3em] text-[#008b8b] mb-4">
+            Investigatives Bautagebuch
+          </p>
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-[#333333] uppercase tracking-tighter mb-8 leading-tight">
+            Planung nach <span className="text-[#008b8b]">Maas</span>
           </h1>
-          <p className="text-xl text-gray-400 max-w-3xl leading-relaxed">
-            Ein dynamisch indizierter Einblick in das eklatante Planungsversagen des Büros Maas (Nauort). 
-            Basierend auf {dynamicIndex?.stats?.totalFiles || 0} eingescannten Beweismitteln, Live-Dokumenten und Fakten.
+          <div className="w-16 h-0.5 bg-[#008b8b] mx-auto mb-8"></div>
+          <p className="text-lg text-[#5c727a] max-w-2xl mx-auto leading-relaxed">
+            Eine lückenlose Dokumentation des Baudebakels der Bühlervilla. 
+            Basierend auf echten gescannten Akten und Gutachten.
           </p>
         </div>
       </header>
 
-      {/* DISCLAIMER / WARNING */}
-      <div className="bg-amber-900/20 border-b border-amber-900/40 px-6 py-4">
-        <div className="max-w-6xl mx-auto flex items-start gap-4">
-          <span className="text-amber-500 mt-0.5">⚠️</span>
-          <p className="text-amber-400/90 text-sm leading-relaxed">
-            <strong>Hinweis:</strong> Alle Einträge in diesem Feed sind mit direkt gescannten Dokumenten (PDF, JPG) 
-            aus dem Cloud-Speicher hinterlegt. Die Metadaten werden live aktualisiert. Reines Informationsinteresse.
-          </p>
-        </div>
-      </div>
+      {/* MAIN CONTENT AREA */}
+      <main className="max-w-[1140px] mx-auto px-4 py-16">
+        <div className="flex flex-col lg:flex-row gap-8 lg:gap-12">
+          
+          {/* FEED / BLOG CONTENT (2/3 width) */}
+          <div className="lg:w-2/3 shrink-0">
+            {contentData.phases.map((phase) => (
+              <div key={phase.id}>
+                {phase.chapters.map((chapter) => {
+                  // Find dynamic index files corresponding to this chapter
+                  const matchedFiles = dynamicIndex?.files?.filter((f: any) => 
+                    f.matchedChapterIds?.includes(chapter.id)
+                  ) || [];
 
-      <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16 flex flex-col lg:flex-row gap-12 relative">
-        
-        {/* SIDEBAR (Sticky Nav & Stats) */}
-        <Sidebar 
-          phases={contentData.phases} 
-          stats={dynamicIndex?.stats} 
-          totalDamage={financialData.totalDamage} 
-        />
-
-        {/* FEED / BLOG CONTENT */}
-        <div className="flex-1 max-w-3xl min-w-0">
-          {contentData.phases.map((phase) => (
-            <div key={phase.id} className="mb-8">
-              {/* Phase Header for context */}
-              {/* 
-              <div className="mb-10 pb-4 border-b border-gray-800">
-                <h2 className="text-3xl font-black text-white">{phase.name}</h2>
+                  return (
+                    <FeedEntry 
+                      key={chapter.id} 
+                      chapter={chapter} 
+                      phaseId={phase.id} 
+                      files={matchedFiles} 
+                    />
+                  );
+                })}
               </div>
-              */}
+            ))}
 
-              {phase.chapters.map((chapter) => {
-                // Find dynamic index files corresponding to this chapter
-                const matchedFiles = dynamicIndex?.files?.filter((f: any) => 
-                  f.matchedChapterIds?.includes(chapter.id)
-                ) || [];
-
-                return (
-                  <FeedEntry 
-                    key={chapter.id} 
-                    chapter={chapter} 
-                    phaseId={phase.id} 
-                    files={matchedFiles} 
-                  />
-                );
-              })}
+            {/* Pagination / End of Feed */}
+            <div className="bg-white p-8 shadow-sm flex items-center justify-center text-center mt-12 mb-8">
+              <p className="text-sm uppercase tracking-widest text-[#999999]">
+                Ende der Dokumentation
+              </p>
             </div>
-          ))}
-
-          {/* End of Feed Signal */}
-          <div className="py-12 flex flex-col items-center justify-center border-t border-gray-800 text-gray-500">
-            <span className="text-3xl mb-4">📜</span>
-            <p className="font-medium">Ende der Akte</p>
-            <p className="text-sm mt-2">Weitere Dokumente werden automatisch synchronisiert.</p>
           </div>
+
+          {/* SIDEBAR (1/3 width) */}
+          <Sidebar 
+            phases={contentData.phases} 
+            stats={dynamicIndex?.stats} 
+            totalDamage={financialData.totalDamage} 
+          />
+          
         </div>
       </main>
 
-      {/* SEO / FOOTER */}
-      <footer className="border-t border-gray-900 bg-gray-950 py-12 px-6">
-        <div className="max-w-6xl mx-auto flex flex-col items-center justify-center text-center">
-          <p className="text-gray-500 mb-6">
-            Such-Tags: Erfahrungen Planung nach Maas, Maas Bendorf Kritik, Frederic Maas Nauort, Baumängel
+      {/* FOOTER */}
+      <footer className="bg-[#333333] py-16 px-4">
+        <div className="max-w-[1140px] mx-auto text-center">
+          <p className="text-sm font-bold uppercase tracking-widest text-[#999999] mb-4">
+            Bühlervilla Dokumentation
           </p>
-          <div className="text-sm text-gray-600">
-            © 2026 Bühlervilla Dokumentation · Cloud-Indexing System V2
-          </div>
+          <div className="w-8 h-0.5 bg-[#5c727a] mx-auto mb-6"></div>
+          <p className="text-[#999999] text-xs max-w-md mx-auto leading-relaxed">
+            Such-Keywords: Erfahrungen Planung nach Maas, Baupfusch Bendorf, Frederic Maas Nauort, Architektur Kritik.
+            <br className="mb-2" />
+            © {new Date().getFullYear()} Alle Rechte vorbehalten. Dokumentation aus öffentlichem Interesse.
+          </p>
         </div>
       </footer>
+      
     </div>
   );
 }
